@@ -1,13 +1,21 @@
 {
   "name": "rodiva-pos-venda",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "Base de domínio para coordenação de pós-venda em mobilidade elétrica",
-  "engines": { "node": ">=24" },
+  "description": "Base de dom\u00ednio para coordena\u00e7\u00e3o de p\u00f3s-venda em mobilidade el\u00e9trica",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
-    "test": "node --test packages/domain/test/*.test.js",
+    "test": "node --test packages/domain/test/*.test.js apps/api/test/*.test.js",
     "demo": "node scripts/demo.js",
-    "check": "node --check packages/domain/src/cases.js && node --check scripts/demo.js"
+    "check": "node scripts/check.js",
+    "start": "node apps/api/start.js",
+    "account": "node scripts/create-account.js"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.16",
+    "pg": "8.23.1"
   }
 }

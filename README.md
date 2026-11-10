@@ -6,11 +6,11 @@ Projeto da Zuma Lab. Nome provisório, sem registro de marca confirmado.
 
 ## Estado real
 
-Fundação do projeto: documentação, regras executáveis de atendimento, testes e proposta de banco PostgreSQL. Ainda não há interface, API, autenticação, persistência ou produto implantado. Não inserir dados de clientes no repositório.
+Primeiro fluxo interno: login por empresa, clientes e veículos, fila de atendimentos, transições, histórico e persistência PostgreSQL. Interface responsiva e API na mesma aplicação. Não há deploy nem acesso externo nesta versão. Não inserir dados de clientes no repositório.
 
 ## Executar
 
-Node.js 24 ou superior. Esta base não tem dependências externas.
+Node.js 24 ou superior. Instale com `npm ci` antes dos comandos abaixo. Para abrir a interface, siga [o primeiro acesso](docs/delivery/run-local.md): não há senha padrão; provisione uma conta antes de `npm start`.
 
 ```sh
 npm test
@@ -21,9 +21,9 @@ npm run demo
 ## Organização
 
 ```text
-apps/                       futuros pontos de entrada web e API
+apps/                       interface web, API e testes de integração
 packages/domain/            regras de atendimento sem dependência de framework
-database/                   modelo relacional proposto; não aplicar em produção
+database/                   migrations e proposta histórica
 docs/product/               escopo, regras e critérios de aceite
 docs/research/              hipóteses e roteiro de campo
 docs/architecture/          decisões e limites de segurança
@@ -37,7 +37,7 @@ Comece pelo [escopo](docs/product/brief.md), pelo [backlog](docs/delivery/backlo
 
 ## Primeira entrega de produto
 
-Autenticação e empresas → cadastro mínimo de cliente/veículo → abrir atendimento → fila de pendências → histórico → encerramento. Compartilhamento externo entra após autorização e isolamento testados.
+Fluxo interno implementado: autenticação → cliente/veículo → atendimento → fila → histórico → encerramento. Testes cobrem RLS, CSRF, concorrência, rollback e persistência após reinício. Adaptador externo precisa de homologação e interação em navegador não foi automatizada nesta entrega. Compartilhamento externo e documentos privados continuam pendentes.
 
 ## Colaboração
 

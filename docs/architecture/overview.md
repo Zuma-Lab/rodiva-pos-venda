@@ -1,32 +1,23 @@
-# Arquitetura inicial
+# Arquitetura — primeiro fluxo interno
 
-## Decisões
+Monólito modular em Node.js 24, interface HTML/CSS/JS e API na mesma origem. Domínio em packages/domain independente de HTTP e banco.
 
-- Monorepositório e monólito modular na primeira aplicação.
-- Domínio JavaScript ESM executável em Node 24, sem dependências externas. Tipagem adicional poderá ser adotada na aplicação.
-- PostgreSQL proposto para persistência relacional.
-- Interface responsiva e API são próximas entregas; não foram criadas nesta fundação.
+PostgreSQL: PGlite embutido para desenvolvimento, pg para conexão externa. Testes de RLS rodam no motor PostgreSQL embutido, sem mock de SQL.
 
-## Limites
+## Identidade
 
-Funções do domínio recebem contexto confiável. Não autenticam usuário nem verificam vínculo do cliente/veículo no banco. A camada de aplicação deverá fazer essas validações e confirmar permissão antes de executar comandos.
+Contas provisionadas pela CLI; senhas derivadas com scrypt e salt aleatório. Sessão opaca: token aleatório, hash no banco, expiração em 12 horas, logout com revogação. Cookie HttpOnly/SameSite=Lax e Secure em produção; respostas privadas sem cache.
 
-O domínio cria UUID, valida transição e versão, exige motivo e retorna um novo estado com evento. Não há banco em memória simulando produção.
+Todo POST exige Origin configurada; POST autenticado exige token CSRF. Tenant e autor nunca vêm do corpo HTTP. Gestor e atendente têm as mesmas operações internas nesta versão; provisionamento não é exposto via HTTP. Recuperação/troca de senha e MFA ainda não existem.
 
-Persistência: carregar com tenant, validar versão, executar UPDATE com tenant_id + id + version anterior e inserir evento na mesma transação. Zero linhas alteradas significa conflito. Não basta verificar versão apenas em JavaScript.
+## Dados
 
-## Isolamento
+Transações operacionais definem empresa e assumem papel sem BYPASSRLS. Políticas e FKs compostas protegem vínculos. Papel de dados sem acesso a autenticação, UPDATE/DELETE em eventos ou provisionamento. Conexão do servidor ainda privilegiada para autenticação/provisionamento, nunca fornecida ao cliente.
 
-Todo registro operacional leva tenant_id. Chaves estrangeiras compostas impedem referências entre empresas. Uma entidade cliente pertence à loja, não é um cadastro global compartilhado entre assinantes.
+Transição: SELECT FOR UPDATE, validação de versão, UPDATE condicional e evento na mesma transação. Falha de evento reverte o caso. Revisão numérica ordena histórico mesmo com timestamps iguais. Estado corrente em JSONB; custos, fornecedores e bateria com histórico são futuras normalizações.
 
-O SQL em database/schema-draft.sql é proposta não executada. RLS está habilitada sem políticas: acesso por papéis comuns deve falhar fechado. Antes do uso, implementar memberships, papéis e políticas com testes em PostgreSQL real. Não usar superusuário ou papel BYPASSRLS na API.
+## Implantação
 
-## Arquivos e acesso externo
+Entrega local e via PR, sem deploy. Produção exige DATABASE_URL e PUBLIC_ORIGIN HTTPS. Antes de implantar: homologar PostgreSQL externo, TLS/proxy, credenciais, rate limit compartilhado, backups/restauração e monitoramento. Limitador atual é por IP observado e por processo; cabeçalhos X-Forwarded-For não são confiados automaticamente.
 
-Armazenamento privado por empresa. Links temporários, tamanho/tipo limitados e verificação de arquivos. Anotações internas separadas de mensagens públicas. Convites por caso com escopo, expiração e revogação; tokens armazenados como hash. Nenhum desses mecanismos foi implementado ainda.
-
-## Operação
-
-Ambientes separados de desenvolvimento, homologação e produção. Credenciais fora do Git; logs sem documentos e contatos pessoais. Backup e restauração devem ser exercitados antes do piloto. Definir retenção, tratamento de dados e processo de incidente.
-
-Referências: [PostgreSQL RLS](https://www.postgresql.org/docs/17/ddl-rowsecurity.html), [guia ANPD](https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-publica-guia-de-seguranca-para-agentes-de-tratamento-de-pequeno-porte).
+Próximos módulos: documentos privados, acesso externo com expiração/revogação, fornecedores, custos e métricas. Não enviar dados operacionais ao GitHub.
