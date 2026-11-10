@@ -1,6 +1,7 @@
-# Aplicações futuras
+# Aplicação interna
 
-Reservado para apps/web (interface responsiva) e apps/api (HTTP e integrações).
-Nenhum servidor foi implementado nesta fundação. O domínio em packages/domain deve ser chamado por uma camada que valide identidade, vínculo com empresa, permissão e versão do atendimento.
+- api/: servidor HTTP, autenticação, serviços e conexão PostgreSQL/PGlite.
+- web/: interface responsiva em HTML/CSS/JavaScript na mesma origem.
+- api/test/: integração HTTP, persistência, RLS e conflitos.
 
-Primeiras telas: fila de pendências, novo atendimento e detalhe com linha do tempo. Framework de interface será escolhido na implementação dessas telas.
+Consulte docs/delivery/run-local.md. Não há cadastro público, emissão fiscal, uploads ou acesso externo nesta versão. Empresa e autor vêm da sessão no servidor.

@@ -11,7 +11,7 @@
 | ROD-07 | P1 | Acesso externo por atendimento | ROD-05, ROD-06 |
 | ROD-08 | P1 | Piloto e indicadores operacionais | ROD-01, ROD-05 |
 
-Base entregue: regras de transição com testes, estrutura de diretórios, documentos e modelo SQL proposto. Itens acima ainda precisam de implementação ou pesquisa.
+Base entregue: domínio, estrutura, documentação e backlog. Na branch feat/primeiro-fluxo: autenticação, persistência PostgreSQL local, RLS, clientes/veículos e atendimentos com histórico. ROD-02 a ROD-05 têm implementação inicial; faltam homologação externa, revisão da interface em navegador, administração de contas, bateria com histórico próprio e preparação operacional. ROD-01 e ROD-06 a ROD-08 continuam pendentes.
 
 ## Sequência
 

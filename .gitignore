@@ -8,3 +8,7 @@ dist/
 *.xlsx
 *.sqlite*
 .DS_Store
+
+.data/
+playwright-report/
+test-results/

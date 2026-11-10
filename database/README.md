@@ -1,7 +1,9 @@
-# Modelo de dados proposto
+# Persistência
 
-schema-draft.sql documenta a primeira persistência; não é uma migração pronta para produção e não foi executado em PostgreSQL nesta etapa.
+A implementação executável está em migrations/001-internal-workflow.sql, aplicada uma vez sob transação e lock. O arquivo schema-draft.sql pertence à proposta histórica; não aplicar junto das migrations.
 
-Entidades: empresas, clientes, veículos, baterias, atendimentos e eventos. Fornecedores, custos, anexos, memberships, convites e assinatura SaaS entram em migrações posteriores.
+Entidades: organizações, usuários, sessões, clientes, veículos, casos e eventos. Estado de atendimento em JSONB, validado pelo domínio. Histórico separado, inserido na mesma transação. FKs compostas impedem vínculos entre empresas. Bateria é um identificador opcional no veículo, sem histórico próprio de substituição nesta entrega.
 
-Antes de aplicar: implementar política de acesso, regras de autorização, transação caso/evento, imutabilidade de eventos, índices de consulta, migrations versionadas, backup e testes de isolamento em PostgreSQL. RLS sem políticas bloqueia papéis comuns deliberadamente; não contornar usando superusuário na aplicação.
+Toda transação operacional assume rodiva_data, papel NOLOGIN/NOBYPASSRLS. RLS usa contexto confiável de empresa. O papel não pode ler autenticação ou modificar eventos existentes. Usuários e sessões são acessados apenas pelo serviço de autenticação com conexão privilegiada no servidor. Essa credencial nunca pode chegar ao navegador. Separar credenciais de provisionamento/autenticação/dados é uma evolução recomendada antes da implantação gerenciada.
+
+Testes usam PostgreSQL embutido (PGlite), com persistência em disco e papel restrito. O adaptador pg para PostgreSQL externo precisa ser homologado com o provedor escolhido. Backup/restauração, retenção e paginação precisam ser concluídos antes de dados reais em escala. PGlite local admite um processo por diretório.
