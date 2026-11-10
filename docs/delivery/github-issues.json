@@ -1,0 +1,34 @@
+[
+  {
+    "title": "ROD-01 · Validar fluxo de pós-venda com lojas e fornecedores",
+    "body": "## Objetivo\n\nPesquisa antes do piloto.\n\n## Critérios de aceite\n\nEntrevistar 6–8 lojas e 2–3 fornecedores; observar casos recentes sem copiar dados pessoais. Registrar frequência, impacto, ferramentas existentes, objeções e intenção de piloto. Não tratar hipótese como demanda comprovada.\n\n## Dependências\n\nNenhuma\n\nReferência: docs/delivery/backlog.md.\n"
+  },
+  {
+    "title": "ROD-02 · Autenticação, empresas e permissões",
+    "body": "## Objetivo\n\nCriar a base de acesso do SaaS.\n\n## Critérios de aceite\n\nLogin e logout; vínculo usuário/empresa no servidor; papéis de gestor e atendente; acesso negado sem vínculo; testes negativos entre empresas; nenhum tenantId do corpo HTTP usado como autorização.\n\n## Dependências\n\nArquitetura inicial\n\nReferência: docs/delivery/backlog.md.\n"
+  },
+  {
+    "title": "ROD-03 · Persistência PostgreSQL e isolamento",
+    "body": "## Objetivo\n\nPersistir atendimento com segurança transacional.\n\n## Critérios de aceite\n\nConverter schema-draft.sql em migrations; implementar policies e memberships; testar com papel sem BYPASSRLS; referências entre empresas rejeitadas; UPDATE condicional por versão e evento na mesma transação; teste de rollback.\n\n## Dependências\n\nROD-02\n\nReferência: docs/delivery/backlog.md.\n"
+  },
+  {
+    "title": "ROD-04 · Clientes, veículos e baterias",
+    "body": "## Objetivo\n\nRegistrar dados mínimos para identificar o atendimento.\n\n## Critérios de aceite\n\nCadastros vinculados à empresa; veículo ligado a cliente; bateria separada; série opcional quando aplicável; validações de vínculo no servidor; pesquisa por identificador; fixtures fictícias.\n\n## Dependências\n\nROD-03\n\nReferência: docs/delivery/backlog.md.\n"
+  },
+  {
+    "title": "ROD-05 · Atendimento, fila e linha do tempo",
+    "body": "## Objetivo\n\nEntregar o primeiro fluxo interno completo.\n\n## Critérios de aceite\n\nAbrir caso; atribuir responsável, próxima ação e prazo; filtrar fila; indicar atraso; executar transições do domínio; mostrar histórico; tratar conflito de edição; concluir com motivo; testar fluxo completo.\n\n## Dependências\n\nROD-04\n\nReferência: docs/delivery/backlog.md.\n"
+  },
+  {
+    "title": "ROD-06 · Evidências e documentos privados",
+    "body": "## Objetivo\n\nReunir documentação por atendimento.\n\n## Critérios de aceite\n\nUpload com limite de tipo/tamanho; storage privado; acesso por empresa; links de curta duração; impedir acesso cruzado; definir verificação de arquivos e retenção; nunca gravar dados reais no Git.\n\n## Dependências\n\nROD-02 e ROD-05\n\nReferência: docs/delivery/backlog.md.\n"
+  },
+  {
+    "title": "ROD-07 · Participação externa por atendimento",
+    "body": "## Objetivo\n\nPermitir acompanhamento limitado por fornecedor ou cliente.\n\n## Critérios de aceite\n\nToken aleatório guardado como hash; expiração e revogação; acesso somente ao caso e campos permitidos; notas internas ocultas; autorização de anexos individual; teste de escopo; limitar tentativas.\n\n## Dependências\n\nROD-05 e ROD-06\n\nReferência: docs/delivery/backlog.md.\n"
+  },
+  {
+    "title": "ROD-08 · Piloto e métricas operacionais",
+    "body": "## Objetivo\n\nValidar adoção e benefício com dados observados.\n\n## Critérios de aceite\n\nRecrutar pilotos consentidos; medir linha de base e uso recorrente; tempo de atendimento e retrabalho; registrar custos de suporte; diferenciar vendas, falhas e atendimentos; não atribuir qualidade por contagem bruta.\n\n## Dependências\n\nROD-01 e ROD-05\n\nReferência: docs/delivery/backlog.md.\n"
+  }
+]
